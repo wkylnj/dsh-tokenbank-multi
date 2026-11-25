@@ -51,5 +51,7 @@
   "register": "Sign up",
   "login": "Sign in",
   "registerTab": "Sign up",
-  "loginTab": "Sign in"
+  "loginTab": "Sign in",
+  "autoCheckinHint": "Check in all accounts once a day at first launch",
+  "autoCheckin": "Auto"
 }

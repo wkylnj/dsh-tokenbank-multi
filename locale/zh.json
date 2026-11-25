@@ -51,5 +51,7 @@
   "register": "注册",
   "login": "登录",
   "registerTab": "注册",
-  "loginTab": "登录"
+  "loginTab": "登录",
+  "autoCheckinHint": "每天首次启动 DSH 时自动给所有账号签到",
+  "autoCheckin": "自动签到"
 }
