@@ -1,0 +1,8 @@
+node_modules/
+_tmp/
+*.log
+.DS_Store
+Thumbs.db
+*.orig.js
+*.new
+*.mjs.tmp
