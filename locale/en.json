@@ -25,8 +25,6 @@
   "checkinAllPart": "{ok} ok, {fail} failed",
   "checkinAllGain": "+${amount} total",
   "account": "Accounts",
-  "accountCount": "Accounts {n}",
-  "accountManage": "Manage accounts",
   "accountRemoved": "Account removed",
   "addAccount": "+ Add account",
   "addAccountTitle": "Add account",
