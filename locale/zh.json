@@ -1,18 +1,10 @@
 {
-  "meta": {
-    "title": "TokenBank多账号",
-    "description": "DSH 免费模型多账号版：在一个面板里管理多个 TokenBank 账号，随时切换、一键签到、查看余额；切换账号即切换模型分组的 API Key（credentials 每次请求重新解析，无需重启）。基于 dsh-tokenbank 改造，移除了充值、托管与交易入口。官网 https://bank.skillpie.cn"
-  },
-  "meta.detail": "docs/DETAIL.zh.md",
   "freeToken": "免费模型",
   "composerEntry": "TokenBank 账户",
-  "officialSite": "TokenBank 官网",
   "openSite": "打开官网",
   "close": "关闭",
   "back": "返回",
   "more": "更多",
-  "reload": "刷新",
-  "notifyOk": "知道了",
   "checkin": "签到",
   "checkinBusy": "签到中…",
   "checkinDone": "已签到",
@@ -24,7 +16,6 @@
   "checkinAllOk": "{n} 个账号签到成功",
   "checkinAllPart": "{ok} 个成功，{fail} 个失败",
   "checkinAllGain": "共 +${amount}",
-  "account": "账号",
   "accountRemoved": "已移除账号",
   "addAccount": "+ 添加账号",
   "addAccountTitle": "添加账号",

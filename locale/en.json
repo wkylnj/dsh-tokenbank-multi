@@ -1,18 +1,10 @@
 {
-  "meta": {
-    "title": "TokenBank Multi-Account",
-    "description": "Multi-account TokenBank for DSH free models: manage several TokenBank accounts in one panel, switch at any time, check in with one click, and see balances. Switching accounts swaps the model group API key (credentials are re-resolved on every request, no restart needed). Based on dsh-tokenbank; recharge, deposit and trading entry points were removed. Site https://bank.skillpie.cn"
-  },
-  "meta.detail": "docs/DETAIL.md",
   "freeToken": "Free models",
   "composerEntry": "TokenBank account",
-  "officialSite": "TokenBank site",
   "openSite": "Open site",
   "close": "Close",
   "back": "Back",
   "more": "More",
-  "reload": "Refresh",
-  "notifyOk": "Got it",
   "checkin": "Check in",
   "checkinBusy": "Checking in…",
   "checkinDone": "Checked in",
@@ -24,7 +16,6 @@
   "checkinAllOk": "{n} accounts checked in",
   "checkinAllPart": "{ok} ok, {fail} failed",
   "checkinAllGain": "+${amount} total",
-  "account": "Accounts",
   "accountRemoved": "Account removed",
   "addAccount": "+ Add account",
   "addAccountTitle": "Add account",
