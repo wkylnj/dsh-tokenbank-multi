@@ -76,6 +76,7 @@
   "relogin": "Sign in again",
   "removeAccount": "Remove account",
   "requestFailed": "Request failed. Try again later.",
+  "rateLimited": "TokenBank is rate limiting this action. Wait a minute and try again.",
   "retry": "Retry",
   "retryRounds": "Retry rounds",
   "retryRoundsHint": "After one pass over every account, retry this many more rounds (0–10)",

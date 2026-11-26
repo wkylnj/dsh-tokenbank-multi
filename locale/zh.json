@@ -76,6 +76,7 @@
   "relogin": "重新登录",
   "removeAccount": "移除账号",
   "requestFailed": "请求失败，请稍后重试",
+  "rateLimited": "TokenBank 正在限流这个操作，请等一两分钟再试",
   "retry": "重试",
   "retryRounds": "重试轮数",
   "retryRoundsHint": "一轮试完所有账号后，整体再来几轮（0–10）",
