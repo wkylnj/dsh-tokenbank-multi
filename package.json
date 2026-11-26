@@ -1,6 +1,6 @@
 {
   "name": "dsh-tokenbank-multi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "DSH 免费模型多账号版：在一个面板里管理多个 TokenBank 账号，随时切换、一键签到、查看余额；切换账号即切换模型分组的 API Key（credentials 每次请求重新解析，无需重启）。基于 dsh-tokenbank 改造，移除了充值、托管与交易入口。官网 https://bank.skillpie.cn",
   "type": "module",
   "license": "MIT",
