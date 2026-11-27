@@ -87,5 +87,18 @@
   "settingsTitle": "TokenBank Multi",
   "switched": "已切换账号",
   "tuningHint": "改完对下一个请求就生效，不需要重启。",
-  "tuningTitle": "轮询参数"
+  "tuningTitle": "轮询参数",
+  "channel": "渠道",
+  "accountsCount": "账号 {n} 个",
+  "accountAdded": "账号已添加",
+  "tokenRefreshed": "令牌已刷新",
+  "refreshToken": "刷新令牌",
+  "refreshTokenPlaceholder": "粘贴 refresh_token（rt_ 开头）",
+  "refreshTokenHint": "星驰登录要过人机验证，插件无法代登录。请在浏览器登录后从 localStorage 复制 refresh_token 粘贴到这里，之后插件会自己续期。",
+  "adding": "添加中",
+  "saving": "保存中",
+  "noBalance": "余额未知",
+  "poolOn": "参与签到与轮转",
+  "poolOff": "已暂停",
+  "modelListUpdated": "模型列表已更新（{n} 个）"
 }

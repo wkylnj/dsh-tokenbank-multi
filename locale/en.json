@@ -87,5 +87,18 @@
   "settingsTitle": "TokenBank Multi",
   "switched": "Account switched",
   "tuningHint": "Takes effect on the next request, no restart needed.",
-  "tuningTitle": "Routing tuning"
+  "tuningTitle": "Routing tuning",
+  "channel": "Channel",
+  "accountsCount": "{n} account(s)",
+  "accountAdded": "Account added",
+  "tokenRefreshed": "Token refreshed",
+  "refreshToken": "Refresh token",
+  "refreshTokenPlaceholder": "Paste the refresh_token (starts with rt_)",
+  "refreshTokenHint": "XingChi login requires a human-verification challenge, so the plugin cannot sign in for you. Sign in in a browser, copy refresh_token from localStorage, and paste it here; the plugin renews it afterwards.",
+  "adding": "Adding",
+  "saving": "Saving",
+  "noBalance": "Balance unknown",
+  "poolOn": "Checked in and routed",
+  "poolOff": "Paused",
+  "modelListUpdated": "Model list updated ({n})"
 }

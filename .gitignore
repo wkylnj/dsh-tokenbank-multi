@@ -6,3 +6,5 @@ Thumbs.db
 *.orig.js
 *.new
 *.mjs.tmp
+
+_secrets/

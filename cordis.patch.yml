@@ -1,8 +1,8 @@
 # dsh-tokenbank-multi bundle patch.
 #
-# One dual-face row: the host half serves POST /dsh-tokenbank-multi/api (portal
-# proxy + multi-account store + model key sync), the client half registers the
-# balance pill, the composer entry and the account panel.
+# One dual-face row: the host half serves POST /dsh-tokenbank-multi/api (channel
+# registry + local gateway on 127.0.0.1:39917 + model key sync), the client half
+# registers the balance pill, the composer entry and the channel panel.
 - insert:
     - id: dsh-tokenbank-multi
       name: "dsh-tokenbank-multi"

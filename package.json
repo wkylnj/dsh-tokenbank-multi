@@ -1,7 +1,7 @@
 {
   "name": "dsh-tokenbank-multi",
-  "version": "0.3.0",
-  "description": "DSH 免费模型多账号版：一个面板管理多个 TokenBank 账号，查看余额、一键签到、切换账号；内置本地网关把请求轮流分发到各账号，自动跳过限流与故障账号。基于 dsh-tokenbank 改造。官网 https://bank.skillpie.cn",
+  "version": "0.4.0",
+  "description": "DSH 多渠道中转站轮转管理：每个渠道独立实现（TokenBank、星驰），共用本地网关按渠道令牌分流，自动跳过限流与故障账号。官网 https://bank.skillpie.cn",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -9,7 +9,9 @@
     "deepseek-harness",
     "dsh-plugin",
     "tokenbank",
-    "multi-account"
+    "xingchi",
+    "multi-account",
+    "gateway"
   ],
   "repository": {
     "type": "git",
@@ -21,7 +23,7 @@
   },
   "main": "./lib/index.js",
   "scripts": {
-    "test": "node test/verify-multi.mjs && node test/verify-flows.mjs"
+    "test": "node test/verify-multi.mjs && node test/verify-flows.mjs && node test/verify-xingchi.mjs && node test/verify-channels.mjs && node test/verify-render.mjs"
   },
   "exports": {
     ".": "./lib/index.js",

@@ -552,7 +552,7 @@ ok(index.Config['~standard'].validate([1]).issues, 'Config: 数组拒绝')
   const zhKeys = Object.keys(zh).sort()
   const enKeys = Object.keys(en).sort()
   eq(JSON.stringify(zhKeys), JSON.stringify(enKeys), 'locale: 双语键一致')
-  eq(zhKeys.length, 89, 'locale: 键数量为 89', zhKeys.length)
+  eq(zhKeys.length, 102, 'locale: 键数量为 102', zhKeys.length)
   // 去掉内嵌字典本身，再看剩余的 UI 代码是否引用到每个键
   const dictStart = client.indexOf('var zh = {')
   const dictEnd = client.indexOf('var pageT')
