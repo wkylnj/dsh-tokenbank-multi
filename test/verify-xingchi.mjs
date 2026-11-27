@@ -110,7 +110,7 @@ function mockFetch(routes) {
 // [3] keys: plaintext readable, create when missing
 {
   const { impl } = mockFetch({
-    'GET /api/v1/keys': { code: 0, data: { items: [{ id: 63426, key: 'sk-abc', status: 'active', name: 'astra', group: { name: 'GPT公益', platform: 'openai' } }], total: 1 } },
+    'GET /api/v1/keys': { code: 0, data: { items: [{ id: 63426, key: 'sk-abc', status: 'active', name: 'astra', group: { name: 'GPT鍏泭', platform: 'openai' } }], total: 1 } },
   })
   globalThis.fetch = impl
   const keys = await xcApi.listKeys('at')
@@ -149,7 +149,7 @@ function mockFetch(routes) {
       return { code: 0, data: { access_token: `at${refreshCount}`, refresh_token: `rt_${String(refreshCount).padStart(64, '0')}`, expires_in: 86400 } }
     },
     'GET /api/v1/user/profile': { code: 0, data: { id: 62459, email: 'wangkaiyu066@gmail.com', balance: 887.9650941, status: 'active' } },
-    'GET /api/v1/keys': { code: 0, data: { items: [{ id: 63458, key: 'sk-xc-key', status: 'active', name: 'astra', group: { name: 'GPT公益', platform: 'openai' } }], total: 1 } },
+    'GET /api/v1/keys': { code: 0, data: { items: [{ id: 63458, key: 'sk-xc-key', status: 'active', name: 'astra', group: { name: 'GPT鍏泭', platform: 'openai' } }], total: 1 } },
     'GET /api/v1/user/checkin': { code: 0, data: { enabled: true, amount: 300, claimed_today: false, today: '2026-11-27', total_count: 0, total_amount: 0 } },
     'POST /api/v1/user/checkin': { code: 0, data: { status: 'ok', amount: 300 } },
     'GET /v1/models': { data: [{ id: 'gpt-6.1-sol', object: 'model', display_name: 'GPT-6.1 Sol', owned_by: 'openai' }], object: 'list' },
@@ -229,7 +229,7 @@ function mockFetch(routes) {
   const routes = {
     'POST /api/v1/auth/refresh': { code: 0, data: { access_token: 'at1', refresh_token: RT_B, expires_in: 86400 } },
     'GET /api/v1/user/profile': { code: 0, data: { id: 85090, email: '2827396881@qq.com', balance: 0, status: 'active' } },
-    'GET /api/v1/groups/available': { code: 0, data: [{ id: 3, name: 'GPT公益', platform: 'openai', status: 'active' }] },
+    'GET /api/v1/groups/available': { code: 0, data: [{ id: 3, name: 'GPT鍏泭', platform: 'openai', status: 'active' }] },
     // First call: a key exists but has no group. Second call (after PUT): grouped.
     'GET /api/v1/keys': () => ({ code: 0, data: { items: [{ id: 98191, key: 'sk-new', status: 'active', name: 'dsh', group_id: assigned ? 3 : null }] } }),
     'PUT /api/v1/keys/98191': () => { assigned = true; return { code: 0, data: { id: 98191, key: 'sk-new', group_id: 3 } } },
@@ -275,7 +275,7 @@ function mockFetch(routes) {
   const routes = {
     'POST /api/v1/auth/refresh': { code: 0, data: { access_token: 'at1', refresh_token: RT_B, expires_in: 86400 } },
     'GET /api/v1/user/profile': { code: 0, data: { id: 62459, email: 'a@qq.com', balance: 12.5, status: 'active' } },
-    'GET /api/v1/groups/available': { code: 0, data: [{ id: 3, name: 'GPT公益', platform: 'openai', status: 'active' }] },
+    'GET /api/v1/groups/available': { code: 0, data: [{ id: 3, name: 'GPT鍏泭', platform: 'openai', status: 'active' }] },
     'GET /api/v1/keys': { code: 0, data: { items: [{ id: 1, key: 'sk-a', status: 'active', group_id: 3 }] } },
   }
   const { impl } = mockFetch(routes)
@@ -348,6 +348,154 @@ function mockFetch(routes) {
   eq(upstream.status, 401, 'error: XingchiError keeps its status')
   eq(upstream.code, 'INVALID_TOKEN', 'error: XingchiError keeps its code')
   eq(upstream.reason, 'INVALID_TOKEN', 'error: XingchiError keeps its reason')
+}
+
+// [12] model sync: own provider route, adopt-and-drop the old direct provider
+{
+  const { createXingchiModels, XINGCHI_KEY_REF, ensureXingchiToken } = await import('../lib/channels/xingchi/models.js')
+  const LOCAL = 'http://127.0.0.1:39917'
+  const ROUTE = 'switchboard-xingchi'
+
+  function fakeSettings(value) {
+    const state = { value, revision: 1 }
+    return {
+      state,
+      describe() { return [{ ns: 'llm-pi-ai', revision: state.revision, value: state.value }] },
+      async mutate(_ns, ops, revision) {
+        if (revision !== state.revision) throw new Error('settings/conflict')
+        for (const op of ops) {
+          if (op.op === 'unset') {
+            let node = state.value
+            for (let i = 0; i < op.path.length - 1; i += 1) {
+              node = node?.[op.path[i]]
+              if (!node || typeof node !== 'object') break
+            }
+            if (node && typeof node === 'object') delete node[op.path[op.path.length - 1]]
+            continue
+          }
+          let node = state.value
+          for (let i = 0; i < op.path.length - 1; i += 1) {
+            if (!node[op.path[i]] || typeof node[op.path[i]] !== 'object') node[op.path[i]] = {}
+            node = node[op.path[i]]
+          }
+          node[op.path[op.path.length - 1]] = op.value
+        }
+        state.revision += 1
+      },
+    }
+  }
+
+  const direct = {
+    displayName: '星驰', apiKeyEnv: 'XINGCHI_API_KEY', api: 'openai-responses',
+    baseURL: 'https://api.xingchiapi.com/v1', models: [{ id: 'gpt-6.1-sol', name: 'GPT-6.1 Sol' }],
+  }
+  const settings = fakeSettings({ providers: { xingchi: structuredClone(direct) } })
+  const manager = createXingchiModels({ settings, localUrl: LOCAL, isListening: () => true })
+  const result = await manager.synchronize([{ id: 'gpt-6.1-sol' }, { id: 'gpt-5.2' }])
+  const written = settings.state.value.providers[ROUTE]
+  eq(result.ok, true, 'models: sync succeeds')
+  eq(result.route, ROUTE, 'models: sync reports its own route')
+  eq(written?.apiKeyEnv, XINGCHI_KEY_REF, 'models: gateway provider uses the gateway credential')
+  eq(written?.baseURL, LOCAL, 'models: gateway provider points at the local gateway')
+  eq(written?.api, 'openai-responses', 'models: gateway provider keeps the Responses protocol')
+  eq(written?.displayName, '转接台 · 星驰', 'models: gateway provider is named after the plugin')
+  eq(written?.models.find((m) => m.id === 'gpt-6.1-sol')?.name, 'GPT-6.1 Sol', 'models: per-model options survive adoption')
+  eq(written?.models.length, 2, 'models: gateway provider gains the new model')
+  eq(settings.state.value.providers.xingchi, undefined, 'models: the old direct provider is removed')
+  eq(result.dropped, true, 'models: sync reports the removal')
+
+  // 直连 provider 若被改成别的地址，就不再是同一渠道，不能删。
+  const other = fakeSettings({ providers: { xingchi: { displayName: '别家', apiKeyEnv: 'OTHER_KEY', baseURL: 'https://other.example/v1' } } })
+  const otherManager = createXingchiModels({ settings: other, localUrl: LOCAL, isListening: () => true })
+  await otherManager.synchronize([{ id: 'gpt-6.1-sol' }])
+  eq(other.state.value.providers.xingchi?.baseURL, 'https://other.example/v1', 'models: an unrelated provider is left untouched')
+  eq(other.state.value.providers[ROUTE]?.baseURL, LOCAL, 'models: sync still writes its own route')
+
+  // 自己的 provider 被别人改到别处，必须拒绝覆盖。
+  const hijacked = fakeSettings({
+    providers: { [ROUTE]: { displayName: 'x', apiKeyEnv: XINGCHI_KEY_REF, baseURL: 'https://other.example/v1', models: [] } },
+  })
+  const hijackedManager = createXingchiModels({ settings: hijacked, localUrl: LOCAL, isListening: () => true })
+  const conflict = await hijackedManager.synchronize([{ id: 'gpt-6.1-sol' }]).then(() => null, (error) => error)
+  eq(conflict?.status, 409, 'models: a hijacked provider is refused')
+  eq(conflict?.code, 'provider_conflict', 'models: hijacked provider conflict code')
+  eq(hijacked.state.value.providers[ROUTE].baseURL, 'https://other.example/v1', 'models: hijacked provider is left untouched')
+
+  const down = createXingchiModels({ settings: fakeSettings({}), localUrl: LOCAL, isListening: () => false })
+  const downError = await down.synchronize([{ id: 'gpt-6.1-sol' }]).then(() => null, (error) => error)
+  eq(downError?.status, 503, 'models: gateway down stays 503')
+
+  // 网关令牌是独立随机值，重复调用不能换掉已存的。
+  const cred = makeCredentials()
+  const firstToken = await ensureXingchiToken(cred)
+  const secondToken = await ensureXingchiToken(cred)
+  eq(/^tb-local-[a-f0-9]{64}$/.test(firstToken), true, 'models: gateway token has the expected shape')
+  eq(secondToken, firstToken, 'models: gateway token is stable across restarts')
+  eq(cred.kv.get(XINGCHI_KEY_REF), firstToken, 'models: gateway token lands in its own credential ref')
+}
+
+// [13] startup migration: the direct provider becomes a gateway provider, no network needed
+{
+  const { createXingchiModels } = await import('../lib/channels/xingchi/models.js')
+  const LOCAL = 'http://127.0.0.1:39917'
+  const ROUTE = 'switchboard-xingchi'
+
+  function fakeSettings(value) {
+    const state = { value, revision: 1 }
+    return {
+      state,
+      describe() { return [{ ns: 'llm-pi-ai', revision: state.revision, value: state.value }] },
+      async mutate(_ns, ops, revision) {
+        if (revision !== state.revision) throw new Error('settings/conflict')
+        for (const op of ops) {
+          if (op.op === 'unset') {
+            let node = state.value
+            for (let i = 0; i < op.path.length - 1; i += 1) {
+              node = node?.[op.path[i]]
+              if (!node || typeof node !== 'object') break
+            }
+            if (node && typeof node === 'object') delete node[op.path[op.path.length - 1]]
+            continue
+          }
+          let node = state.value
+          for (let i = 0; i < op.path.length - 1; i += 1) {
+            if (!node[op.path[i]] || typeof node[op.path[i]] !== 'object') node[op.path[i]] = {}
+            node = node[op.path[i]]
+          }
+          node[op.path[op.path.length - 1]] = op.value
+        }
+        state.revision += 1
+      },
+    }
+  }
+
+  const settings = fakeSettings({
+    providers: {
+      xingchi: {
+        displayName: '星驰', apiKeyEnv: 'XINGCHI_API_KEY', api: 'openai-responses',
+        baseURL: 'https://api.xingchiapi.com/v1',
+        models: [{ id: 'gpt-6.1-sol', name: 'GPT-6.1 Sol', reasoningEfforts: { high: 'high' } }],
+      },
+      other: { displayName: '别家', apiKeyEnv: 'OTHER_KEY', baseURL: 'https://other.example/v1', models: [] },
+    },
+  })
+  const manager = createXingchiModels({ settings, localUrl: LOCAL, isListening: () => true })
+  eq(await manager.migrate(), true, 'migrate: a direct provider is migrated at startup')
+  const written = settings.state.value.providers[ROUTE]
+  eq(written?.baseURL, LOCAL, 'migrate: the new provider points at the gateway')
+  eq(written?.apiKeyEnv, 'XINGCHI_MULTI_GATEWAY_KEY', 'migrate: the new provider uses the gateway credential')
+  eq(written?.displayName, '转接台 · 星驰', 'migrate: the new provider is named after the plugin')
+  eq(written?.models?.[0]?.name, 'GPT-6.1 Sol', 'migrate: model options carry over without a network call')
+  eq(settings.state.value.providers.xingchi, undefined, 'migrate: the direct provider is gone')
+  eq(settings.state.value.providers.other?.baseURL, 'https://other.example/v1', 'migrate: unrelated providers stay')
+  eq(await manager.migrate(), false, 'migrate: running twice is a no-op')
+
+  const clean = fakeSettings({ providers: {} })
+  const cleanManager = createXingchiModels({ settings: clean, localUrl: LOCAL, isListening: () => true })
+  eq(await cleanManager.migrate(), false, 'migrate: nothing to migrate without a direct provider')
+
+  const offline = createXingchiModels({ settings: fakeSettings({ providers: { xingchi: { baseURL: 'https://api.xingchiapi.com/v1' } } }), localUrl: LOCAL, isListening: () => false })
+  eq(await offline.migrate(), false, 'migrate: skipped while the gateway is down')
 }
 
 console.log(`PASS: ${pass}  FAIL: ${fail}`)
