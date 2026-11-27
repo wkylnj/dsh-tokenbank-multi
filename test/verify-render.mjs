@@ -151,7 +151,7 @@ vm.createContext(sandbox)
 vm.runInContext(source, sandbox, { filename: 'client.js' })
 
 ok(plugin !== null, 'bundle: factory 被执行')
-ok(plugin.name === 'dsh-tokenbank-multi', 'plugin: name', plugin.name)
+ok(plugin.name === 'dsh-switchboard', 'plugin: name', plugin.name)
 
 const slots = []
 const locale = []
@@ -169,10 +169,10 @@ plugin.apply(ctx)
 
 const slot = (id) => slots.map((entry) => entry.value).find((value) => value && value.definition && value.definition.id === id)
 
-const panelSlot = slot('dsh-tokenbank-multi-panel')
-const entrySlot = slot('dsh-tokenbank-multi-entry')
-const balanceSlot = slot('dsh-tokenbank-multi-balance')
-const settingsSlot = slot('dsh-tokenbank-multi')
+const panelSlot = slot('dsh-switchboard-panel')
+const entrySlot = slot('dsh-switchboard-entry')
+const balanceSlot = slot('dsh-switchboard-balance')
+const settingsSlot = slot('dsh-switchboard')
 ok(Boolean(panelSlot), 'slot: 账号面板已注册')
 ok(Boolean(entrySlot), 'slot: 输入框入口已注册')
 ok(Boolean(balanceSlot), 'slot: 余额胶囊已注册')
@@ -322,7 +322,7 @@ function collect(node, out = [], depth = 0, seen = new Set()) {
 
 /* ── 6. locale registration ──────────────────────────────────────────── */
 {
-  ok(locale.length === 1 && locale[0].ns === 'dsh-tokenbank-multi', 'locale: 注册了一次')
+  ok(locale.length === 1 && locale[0].ns === 'dsh-switchboard', 'locale: 注册了一次')
   const dict = locale[0] && locale[0].dict
   const zhKeys = Object.keys((dict && dict.zh) || {})
   const enKeys = Object.keys((dict && dict.en) || {})

@@ -503,14 +503,14 @@ ok(index.Config['~standard'].validate([1]).issues, 'Config: 数组拒绝')
 
   const post = (body, headers = {}) => fetch(listener.url + '/', {
     method: 'POST', body: typeof body === 'string' ? body : JSON.stringify(body),
-    headers: { 'content-type': 'application/json', 'x-dsh-tokenbank': '1', ...headers },
+    headers: { 'content-type': 'application/json', 'x-dsh-switchboard': '1', ...headers },
   })
 
   eq((await post({ action: 'status' })).status, 200, 'panel: 正常请求 200')
   eq((await post({ action: 'status' }, { 'x-test-reject': '1' })).status, 403, 'panel: 宿主拒绝时 403')
   eq((await post({ action: 'status' }, { 'x-test-other': '1' })).status, 403, 'panel: 非浏览器 Peer 403')
-  eq((await fetch(listener.url + '/', { headers: { 'x-dsh-tokenbank': '1' } })).status, 405, 'panel: GET 405')
-  eq((await post({ action: 'status' }, { 'x-dsh-tokenbank': '' })).status, 403, 'panel: 缺自定义头 403')
+  eq((await fetch(listener.url + '/', { headers: { 'x-dsh-switchboard': '1' } })).status, 405, 'panel: GET 405')
+  eq((await post({ action: 'status' }, { 'x-dsh-switchboard': '' })).status, 403, 'panel: 缺自定义头 403')
   eq((await post({ action: 'status' }, { origin: 'http://evil.test' })).status, 403, 'panel: 跨源 403')
   eq((await post({ action: 'status' }, { 'sec-fetch-site': 'cross-site' })).status, 403, 'panel: 跨站 sec-fetch-site 403')
   eq((await post({ action: 'status' }, { 'content-type': 'text/plain' })).status, 415, 'panel: 非 JSON 415')
@@ -536,7 +536,7 @@ ok(index.Config['~standard'].validate([1]).issues, 'Config: 数组拒绝')
   const listener = await listen((req, res) => { void handler(req, res) })
   const res = await fetch(listener.url + '/', {
     method: 'POST', body: '{"action":"status"}',
-    headers: { 'content-type': 'application/json', 'x-dsh-tokenbank': '1' },
+    headers: { 'content-type': 'application/json', 'x-dsh-switchboard': '1' },
   })
   eq(res.status, 500, 'panel: 非受控错误 500')
   eq((await res.json()).ok, false, 'panel: 错误响应 ok=false')

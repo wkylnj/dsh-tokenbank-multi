@@ -1,7 +1,7 @@
 {
-  "name": "dsh-tokenbank-multi",
+  "name": "dsh-switchboard",
   "version": "0.4.0",
-  "description": "DSH 多渠道中转站轮转管理：每个渠道独立实现（TokenBank、星驰），共用本地网关按渠道令牌分流，自动跳过限流与故障账号。官网 https://bank.skillpie.cn",
+  "description": "DSH 多渠道中转站轮转管理（转接台）：每个渠道独立实现（TokenBank、星驰），共用本地网关按渠道令牌分流，自动跳过限流与故障账号。官网 https://bank.skillpie.cn",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -11,15 +11,17 @@
     "tokenbank",
     "xingchi",
     "multi-account",
-    "gateway"
+    "gateway",
+    "dsh-switchboard",
+    "switchboard"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wkylnj/dsh-tokenbank-multi.git"
+    "url": "git+https://github.com/wkylnj/dsh-switchboard.git"
   },
-  "homepage": "https://github.com/wkylnj/dsh-tokenbank-multi#readme",
+  "homepage": "https://github.com/wkylnj/dsh-switchboard#readme",
   "bugs": {
-    "url": "https://github.com/wkylnj/dsh-tokenbank-multi/issues"
+    "url": "https://github.com/wkylnj/dsh-switchboard/issues"
   },
   "main": "./lib/index.js",
   "scripts": {

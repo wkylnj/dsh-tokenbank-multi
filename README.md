@@ -1,4 +1,4 @@
-# 多渠道中转站轮转管理 (dsh-tokenbank-multi)
+# 转接台 dsh-switchboard — 多渠道中转站轮转管理
 
 在 DeepSeek Harness 里同时接入多个中转站，**一个本地网关、一个面板**统一管理。每个渠道独立实现，互不影响：
 
@@ -16,7 +16,7 @@
 - ⚖️ **自动轮询分摊**：内置本地网关，每个推理请求按轮询落到不同账号，**429 自动换号重发**，客户端完全无感
 - 📅 **每日签到**：面板里一键签到，也可开自动签到，每天首次启动 DSH 时自动给所有账号签
 - 💰 **余额一览**：输入框下方显示当前渠道的余额合计
-- ⚙️ **设置页**：`设置 → TokenBank Multi`，看网关状态、勾选参与轮询的账号、调轮询参数、开自动签到
+- ⚙️ **设置页**：`设置 → 转接台`，看网关状态、勾选参与轮询的账号、调轮询参数、开自动签到
 - 🧹 **砍掉噪音**：没有充值档位、没有托管引导、没有词元交易、没有低余额弹窗
 
 ## 架构：一个网关，多个渠道
@@ -90,8 +90,8 @@ DSH ──▶ http://127.0.0.1:39917 ──▶ TokenBank / 星驰 / …
 ## 安装
 
 ```sh
-git clone https://github.com/wkylnj/dsh-tokenbank-multi.git
-dsh plugin --profile desktop add ./dsh-tokenbank-multi
+git clone https://github.com/wkylnj/dsh-switchboard.git
+dsh plugin --profile desktop add ./dsh-switchboard
 ```
 
 装完刷新 GUI。**不需要手改 `cordis.patch.yml`**：插件启动、网关开始监听后，会把已有的 `tokenbank` / `xingchi` provider 指向本地网关，并且只改必须的字段（`apiKeyEnv` / `baseURL` / 模型列表），`displayName`、`retryPolicy`、你手动加过的模型都会保留。网关没监听时它不会改动配置，也不会偷偷把你改回直连。
@@ -112,7 +112,7 @@ dsh plugin --profile desktop add ./dsh-tokenbank-multi
 
 ## 设置页
 
-`设置 → TokenBank Multi`（order 50）。四张卡：
+`设置 → 转接台`（order 50）。四张卡：
 
 | 卡片 | 内容 |
 |---|---|

@@ -496,7 +496,7 @@ function session(expiresMS) {
     const listener = await listen((req, res) => { void handler(req, res) })
     const res = await fetch(listener.url + '/', {
       method: 'POST', body: '{"action":"status"}',
-      headers: { 'content-type': 'application/json', 'x-dsh-tokenbank': '1' },
+      headers: { 'content-type': 'application/json', 'x-dsh-switchboard': '1' },
     })
     eq(res.status, item.status, `panel: ${item.label}`)
     const payload = await res.json()
